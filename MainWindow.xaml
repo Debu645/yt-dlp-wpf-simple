@@ -1,0 +1,236 @@
+<Window x:Class="YtDlpHelper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="yt-dlp 辅助工具"
+        Height="820"
+        Width="1080"
+        MinHeight="600"
+        MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BackgroundBrush}"
+        Foreground="{DynamicResource ForegroundBrush}"
+        Closing="MainWindow_Closing">
+
+    <Grid Margin="0" MouseDown="RootGrid_MouseDown" Focusable="True">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ============ 顶部标题栏 ============ -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource SurfaceBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="20,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="40" Height="40"
+                            Background="{DynamicResource AccentBrush}"
+                            CornerRadius="10"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="yt"
+                                   Foreground="White"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="yt-dlp 辅助工具"
+                                   FontSize="18"
+                                   FontWeight="Bold"/>
+                        <TextBlock Text="视频下载与格式管理"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource MutedForegroundBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBlock Grid.Column="1"
+                           Text="基于 yt-dlp 的图形化下载工具"
+                           FontSize="12"
+                           Foreground="{DynamicResource MutedForegroundBrush}"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- ============ 主内容区 ============ -->
+        <Grid Grid.Row="1" Margin="20,12,20,16">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- ============ 基本设置卡片 ============ -->
+            <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="基本设置"
+                               Style="{StaticResource SectionTitleStyle}"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="yt-dlp.exe 路径"
+                                   Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1"
+                                 x:Name="YtDlpPathTextBox"
+                                 Text="yt-dlp.exe"
+                                 ToolTip="可以填完整路径，例如 D:\tools\yt-dlp.exe。如果已加入 PATH，可保持 yt-dlp.exe"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                   Text="视频地址 URL"
+                                   Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1"
+                                 x:Name="UrlTextBox"
+                                 ToolTip="执行 -F 时必须填写目标视频地址或 yt-dlp 支持的链接"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                   Text="下载目录"
+                                   Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Grid.Row="2" Grid.Column="1"
+                                 x:Name="DownloadDirTextBox"
+                                 ToolTip="例如：D:\Downloads。留空则使用 yt-dlp 默认当前目录"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- ============ 高级设置卡片 ============ -->
+            <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,8,0,0">
+                <StackPanel>
+                    <TextBlock Text="高级设置"
+                               Style="{StaticResource SectionTitleStyle}"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="SOCKS 代理"
+                                   Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1"
+                                 x:Name="ProxyTextBox"
+                                 ToolTip="例如：socks5://127.0.0.1:1080 或 socks5h://127.0.0.1:1080"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                   Text="cookies 文件路径"
+                                   Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1"
+                                 x:Name="CookiesTextBox"
+                                 ToolTip="例如：D:\cookies.txt。需要是 yt-dlp 支持的 cookies 文件格式"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                   Text="附加参数"
+                                   Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Grid.Row="2" Grid.Column="1"
+                                 x:Name="ExtraArgsTextBox"
+                                 ToolTip="例如：--no-playlist --retries 5 --ffmpeg-location D:\ffmpeg\bin"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0"
+                                   Text="视频格式 ID"
+                                   Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Grid.Row="3" Grid.Column="1"
+                                 x:Name="VideoFormatIdTextBox"
+                                 ToolTip="例如：137，也可以填 bv*[height&lt;=1080] 这类格式选择"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0"
+                                   Text="音频格式 ID"
+                                   Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox Grid.Row="4" Grid.Column="1"
+                                 x:Name="AudioFormatIdTextBox"
+                                 ToolTip="例如：140，也可以填 ba 这类格式选择"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- ============ 操作按钮区 ============ -->
+            <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="0,8,0,0">
+                <StackPanel>
+                    <TextBlock Text="操作"
+                               Style="{StaticResource SectionTitleStyle}"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="ListFormatsButton"
+                                Content="列出可用格式"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="ListFormatsButton_Click"/>
+
+                        <Button x:Name="DownloadButton"
+                                Content="下载视频"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="DownloadButton_Click"/>
+
+                        <Button x:Name="CancelButton"
+                                Content="取消"
+                                Style="{StaticResource DangerButtonStyle}"
+                                Click="CancelButton_Click"
+                                IsEnabled="False"/>
+
+                        <CheckBox x:Name="ShowWindowCheckBox"
+                                  Content="显示 yt-dlp 控制台窗口"
+                                  Margin="8,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- ============ 输出控制台 ============ -->
+            <Border Grid.Row="3" Style="{StaticResource CardStyle}" Margin="0,8,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="输出"
+                               Style="{StaticResource SectionTitleStyle}"/>
+
+                    <Border Grid.Row="1"
+                            Background="{DynamicResource OutputBackgroundBrush}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="4">
+                        <TextBox x:Name="OutputTextBox"
+                                 IsReadOnly="True"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 FontFamily="Consolas"
+                                 FontSize="12.5"
+                                 Background="Transparent"
+                                 BorderThickness="0"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+    </Grid>
+</Window>
